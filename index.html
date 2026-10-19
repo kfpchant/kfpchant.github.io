@@ -4,20 +4,60 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>KICKFLIP 응원법</title>
+<style>
+  body { margin: 0; background: #f3f1ea; color: #161616; font-family: -apple-system, sans-serif; }
+  main { max-width: 480px; margin: 0 auto; min-height: 100vh; padding: 36px 20px; }
+  h1 { margin: 0; font-size: 34px; }
+  .bar { width: 64px; height: 5px; background: #0033ff; margin: 14px 0 22px; }
+  button { width: 100%; text-align: left; margin: 0 0 10px; padding: 16px; border: 2px solid #161616; background: transparent; color: #161616; font-size: 20px; font-weight: 800; }
+  button small { display: block; margin-top: 4px; font-size: 13px; font-weight: 500; }
+  .hide { display: none; }
+</style>
 </head>
 <body>
-<h1>KICKFLIP 응원법</h1>
-<p>첫 페이지</p>
-</body>
-</html><!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>KICKFLIP 응원법</title>
-</head>
-<body>
-<h1>KICKFLIP 응원법</h1>
-<p>첫 페이지</p>
+<main id="home">
+  <h1>KICKFLIP 응원법</h1>
+  <div class="bar"></div>
+  <div id="albums"></div>
+</main>
+<main id="list" class="hide">
+  <button onclick="backHome()">뒤로</button>
+  <h1 id="listTitle"></h1>
+  <div class="bar"></div>
+  <div id="songs"></div>
+</main>
+<script>
+var albums = [
+  ["1집", "Flip it, Kick it!", ["Mama Said", "응 그래", "WARRIORS", "Knock Knock", "Like A Monster", "See You Tomorrow"]],
+  ["2집", "Kick Out, Flip Now!", ["FREEZE", "제끼자", "Before the Sun Explodes", "Electricity", "Complicated!!", "Code Red", "How We KickFlip"]],
+  ["3집", "My First Flip", ["처음 불러보는 노래", "반창고", "특이점", "다시, 여기", "Gas On It", "404: Not Found", "악몽을 꿨던 건 비밀이지만"]],
+  ["4집", "My First Kick", ["눈에 거슬리고 싶어", "Twenty", "Stup!d", "거꾸로", "Scroll", "Roar", "My Direction"]],
+  ["5집", "KICK OFF THE WALL Pt. 1", ["미완성", "Kick Off The Wall", "0 (Young)", "휘청", "hate blueberry", "Drop In", "우리 같이 청춘을 낭비해"]]
+];
+var box = document.getElementById("albums");
+albums.forEach(function (album, i) {
+  var b = document.createElement("button");
+  b.innerHTML = album[0] + "<small>" + album[1] + "</small>";
+  b.onclick = function () { openAlbum(i); };
+  box.appendChild(b);
+});
+function openAlbum(i) {
+  document.getElementById("home").classList.add("hide");
+  document.getElementById("list").classList.remove("hide");
+  document.getElementById("listTitle").textContent = albums[i][0];
+  var songs = document.getElementById("songs");
+  songs.innerHTML = "";
+  albums[i][2].forEach(function (name) {
+    var b = document.createElement("button");
+    b.textContent = name;
+    b.style.fontSize = "16px";
+    songs.appendChild(b);
+  });
+}
+function backHome() {
+  document.getElementById("list").classList.add("hide");
+  document.getElementById("home").classList.remove("hide");
+}
+</script>
 </body>
 </html>
