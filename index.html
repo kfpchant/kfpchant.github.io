@@ -6,12 +6,14 @@
 <title>KICKFLIP 응원법</title>
 <style>
   body { margin: 0; background: #f3f1ea; color: #161616; font-family: -apple-system, sans-serif; }
-  main { max-width: 480px; margin: 0 auto; min-height: 100vh; padding: 36px 20px; }
+  main { max-width: 480px; margin: 0 auto; min-height: 100vh; padding: 36px 20px 48px; }
   h1 { margin: 0; font-size: 34px; }
   .bar { width: 64px; height: 5px; background: #D3362B; margin: 14px 0 22px; }
   button { width: 100%; text-align: left; margin: 0 0 10px; padding: 16px; border: 2px solid #161616; background: transparent; color: #161616; font-size: 20px; font-weight: 800; }
   button small { display: block; margin-top: 4px; font-size: 13px; font-weight: 500; }
   .hide { display: none; }
+  .line { margin: 0 0 10px; font-size: 18px; line-height: 1.45; }
+  b { color: #D3362B; }
 </style>
 </head>
 <body>
@@ -21,10 +23,16 @@
   <div id="albums"></div>
 </main>
 <main id="list" class="hide">
-  <button onclick="backHome()">뒤로</button>
+  <button onclick="show('home')">뒤로</button>
   <h1 id="listTitle"></h1>
   <div class="bar"></div>
   <div id="songs"></div>
+</main>
+<main id="read" class="hide">
+  <button onclick="show('list')">뒤로</button>
+  <h1 id="songTitle"></h1>
+  <div class="bar"></div>
+  <div id="lines"></div>
 </main>
 <script>
 var albums = [
@@ -34,16 +42,80 @@ var albums = [
   ["4집", "My First Kick", ["눈에 거슬리고 싶어", "Twenty", "Stup!d", "거꾸로", "Scroll", "Roar", "My Direction"]],
   ["5집", "KICK OFF THE WALL Pt. 1", ["미완성", "Kick Off The Wall", "0 (Young)", "휘청", "hate blueberry", "Drop In", "우리 같이 청춘을 낭비해"]]
 ];
-var box = document.getElementById("albums");
+var chants = {
+  "응 그래": [
+    "응 그래",
+    "<b>응 그래</b> 뭐가 그리 고민이 많아",
+    "<b>응 그래</b> 내 머릿속은 무지개 꽃밭",
+    "<b>응 그래</b> 좋아하는 건 재밌는 거",
+    "<b>응 그래 응 뭐 뭐 응 응 그래</b>",
+    "<b>응 뭐라고?</b> 내가 이상해 보여?",
+    "<b>응 뭐라고?</b> 걱정은 넣어둬요",
+    "<b>응 아니야 아 아니야</b>",
+    "<b>응 그래 응 뭐 뭐 응 응 그래</b>",
+    "뜻대로 안될 땐 오히려 좋아",
+    "<b>내 패기 안 꺾임</b>",
+    "힘들면 잠깐만 Run 하지 뭐",
+    "<b>냅다 튀기 슝</b>",
+    "위기가 오면 <b>난</b>",
+    "훗 이건 예상 <b>밖</b>",
+    "이럴 때 실눈캐처럼",
+    "씨익 웃어넘겨 Smile",
+    "응 그래",
+    "<b>응 그래 응 뭐 뭐 응 응 그래</b>",
+    "<b>응 그래 응 뭐 뭐 응 응 그래</b>",
+    "<b>응 그래 응 뭐 뭐 응 응 그래</b>",
+    "<b>응 그래 응 뭐 뭐 응 응 그래</b>",
+    "응 그래 응 뭐 뭐 응 응 그래",
+    "응 그래 응 뭐 뭐 응 응 그래",
+    "응 그래 응 뭐 뭐 응 응 그래",
+    "응 그래 응 뭐 뭐 응 응 그래",
+    "<b>이계훈! 아마루! 이동화! 장주왕! 최민제! 케이주! 이동현! 킥플립!</b>",
+    "왜 또 누가 무슨 잔소리야",
+    "나보고 안된다고?",
+    "그래 듣고 흘린 자세",
+    "Like 합기도 받아넘긴 다음",
+    "난 아냐 <b>For show</b>",
+    "뿌리부터 <b>Freedom</b>",
+    "Yeah 하던 말은 이쯤하고 <b>Toss</b>",
+    "그래 원하던 바야 저 반응 <b>Choice</b>",
+    "쨌든 끝에 웃는 내 모습 Awesome yeah",
+    "<b>응 그래 응 뭐 뭐 응 응 그래</b>",
+    "뜻대로 안될 땐 오히려 좋아",
+    "<b>내 패기 안 꺾임</b>",
+    "힘들면 잠깐만 Run 하지 뭐",
+    "<b>냅다 튀기 슝</b>",
+    "위기가 오면 <b>난</b>",
+    "훗 이건 예상 <b>밖</b>",
+    "이럴 때 실눈캐처럼",
+    "씨익 웃어넘겨 Smile",
+    "응 그래",
+    "<b>응 그래 응 뭐 뭐 응 응 그래</b>",
+    "<b>응 그래 응 뭐 뭐 응 응 그래</b>",
+    "<b>응 그래 응 뭐 뭐 응 응 그래</b>",
+    "<b>응 그래 응 뭐 뭐 응 응 그래</b>",
+    "응 그래 응 뭐 뭐 응 응 그래",
+    "응 그래 응 뭐 뭐 응 응 그래",
+    "응 그래 응 뭐 뭐 응 응 그래",
+    "응 그래 응 뭐 뭐 응 응 그래",
+    "응 그래 아니야",
+    "<b>이계훈! 아마루! 이동화! 장주왕! 최민제! 케이주! 이동현! 킥플립!</b>",
+    "뭐 뭐 뭐 아 아 아니야",
+    "<b>(함성)</b>"
+  ]
+};
+function show(id) {
+  ["home", "list", "read"].forEach(function (name) {
+    document.getElementById(name).classList.toggle("hide", name !== id);
+  });
+}
 albums.forEach(function (album, i) {
   var b = document.createElement("button");
   b.innerHTML = album[0] + "<small>" + album[1] + "</small>";
   b.onclick = function () { openAlbum(i); };
-  box.appendChild(b);
+  document.getElementById("albums").appendChild(b);
 });
 function openAlbum(i) {
-  document.getElementById("home").classList.add("hide");
-  document.getElementById("list").classList.remove("hide");
   document.getElementById("listTitle").textContent = albums[i][0];
   var songs = document.getElementById("songs");
   songs.innerHTML = "";
@@ -51,12 +123,23 @@ function openAlbum(i) {
     var b = document.createElement("button");
     b.textContent = name;
     b.style.fontSize = "16px";
+    b.onclick = function () { openSong(name); };
     songs.appendChild(b);
   });
+  show("list");
 }
-function backHome() {
-  document.getElementById("list").classList.add("hide");
-  document.getElementById("home").classList.remove("hide");
+function openSong(name) {
+  document.getElementById("songTitle").textContent = name;
+  var lines = document.getElementById("lines");
+  var chant = chants[name];
+  if (!chant) {
+    lines.innerHTML = "<p class='line'>이 곡은 다음에 넣습니다.</p>";
+  } else {
+    lines.innerHTML = chant.map(function (text) {
+      return "<p class='line'>" + text + "</p>";
+    }).join("");
+  }
+  show("read");
 }
 </script>
 </body>
